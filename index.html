@@ -82,7 +82,7 @@
     <div class="container">
         <div class="form-section">
             <label for="points">Entrez votre nombre de points :</label>
-            <input type="number" id="points" value="100">
+            <input type="number" id="points" value="280">
             <button onclick="updateChart()">Mettre à jour</button>
         </div>
         <div>
@@ -137,6 +137,7 @@
                             data: valeur_point,
                             borderColor: 'blue',
                             borderWidth: 2,
+							pointStyle: 'false',
                             fill: false
                         },
                         {
@@ -144,6 +145,7 @@
                             data: valeur_inflation,
                             borderColor: 'green',
                             borderWidth: 2,
+							pointStyle: 'false',
                             fill: false
                         },
                         {
@@ -151,6 +153,7 @@
                             data: smic,
                             borderColor: 'red',
                             borderWidth: 2,
+							pointStyle: 'false',
                             fill: false
                         }
                     ]
