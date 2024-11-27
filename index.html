@@ -119,7 +119,7 @@
             const dates = rawData.map(row => row.Date);
             const valeur_point = rawData.map(row => parseFloat(row["A"]));
             const valeur_inflation = rawData.map(row => parseFloat(row["B"]));
-            const smic = rawData.map(row => parseFloat(row["C"]));
+            //const smic = rawData.map(row => parseFloat(row["C"]));
 			
             const minValue = Math.floor(Math.min(
                 ...valeur_point,
@@ -148,14 +148,14 @@
 							pointStyle: false,
                             fill: false
                         },
-                        {
-                            label: "SMIC",
-                            data: smic,
-                            borderColor: 'red',
-                            borderWidth: 2,
-							pointStyle: false,
-                            fill: false
-                        }
+<!-- //                        { -->
+                            <!-- label: "SMIC", -->
+                            <!-- data: smic, -->
+                            <!-- borderColor: 'red', -->
+                            <!-- borderWidth: 2, -->
+							<!-- pointStyle: false, -->
+                            <!-- fill: false -->
+                        <!-- } -->
                     ]
                 },
                 options: {
