@@ -117,8 +117,9 @@
 
             // Préparer les données pour le graphique
             const dates = rawData.map(row => row.Date);
-            const valeur_point = rawData.map(row => parseFloat(row["A"]));
-            const valeur_inflation = rawData.map(row => parseFloat(row["B"]));
+            const valeur_point = rawData.map(row => parseFloat(row["A"]) * points);
+            const valeur_inflation = rawData.map(row => parseFloat(row["B"]) * points);
+            const smic = rawData.map(row => parseFloat(row["C"]) / points);
 			
             const minValue = Math.floor(Math.min(
                 ...valeur_point,
@@ -147,7 +148,15 @@
 							pointStyle: false,
                             fill: false
                         },
-                     ]
+                        {
+                            label: "SMIC",
+                            data: smic,
+                            borderColor: 'red',
+                            borderWidth: 2,
+							pointStyle: false,
+                            fill: false
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
