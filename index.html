@@ -117,9 +117,9 @@
 
             // Préparer les données pour le graphique
             const dates = rawData.map(row => row.Date);
-            const valeur_point = rawData.map(row => parseFloat(row["Point d'indice"]) * points);
-            const valeur_inflation = rawData.map(row => parseFloat(row["Point d'indice avec inflation"]) * points);
-            const smic = rawData.map(row => parseFloat(row["SMIC"]));
+            const valeur_point = rawData.map(row => parseFloat(row["A"]) * points);
+            const valeur_inflation = rawData.map(row => parseFloat(row["B"]) * points);
+            const smic = rawData.map(row => parseFloat(row["C"]));
 
             const minValue = Math.floor(Math.min(
                 ...valeur_point,
@@ -133,14 +133,14 @@
                     labels: dates,
                     datasets: [
                         {
-                            label: "Point d'indice",
+                            label: "Salaire",
                             data: valeur_point,
                             borderColor: 'blue',
                             borderWidth: 2,
                             fill: false
                         },
                         {
-                            label: "Point d'indice avec inflation",
+                            label: "Salaire avec inflation",
                             data: valeur_inflation,
                             borderColor: 'green',
                             borderWidth: 2,
