@@ -195,11 +195,19 @@
                     }
                 }
             });
-            const salaire2008 = parseFloat(rawData.find(row => row.Date === '2008-01')["A"]) * points;
-            const smic2008 = parseFloat(rawData.find(row => row.Date === '2008-01')["C"]);
+            // Nettoyage des données vides ou incomplètes
+            const filteredData = rawData.filter(row => row.Date && row["A"] && row["B"] && row["C"]);
+
+            // Récupérer la ligne de janvier 2008
+            const row2008 = filteredData.find(row => row.Date === '2008-01');
+            if (!row2008) return;
+
+            const salaire2008 = parseFloat(row2008["A"]) * points;
+            const smic2008 = parseFloat(row2008["C"]);
             const A = (salaire2008 - smic2008).toFixed(2);
 
-            const lastRow = rawData[rawData.length - 1];
+            // Récupérer la ligne la plus récente (dernière ligne utile)
+            const lastRow = filteredData[filteredData.length - 1];
             const lastDate = lastRow.Date;
             const salaireActuel = parseFloat(lastRow["A"]) * points;
             const inflationActuelle = parseFloat(lastRow["B"]) * points;
@@ -207,13 +215,14 @@
             const B = (salaireActuel - inflationActuelle).toFixed(2);
             const C = (salaireActuel - smicActuel).toFixed(2);
 
+            // Affichage
             document.getElementById("result-box").innerHTML = `
-                Votre salaire actuel au ${lastDate} est de ${salaireActuel.toFixed(2)} €. 
-                S'il était resté indexé à l'inflation il serait de ${(inflationActuelle).toFixed(2)} €. 
-                La différence entre votre salaire et le SMIC en janvier 2008 était de ${A} €. 
-                Elle est au ${lastDate} de ${C} €.
+                Votre salaire actuel au <strong>${lastDate}</strong> est de <strong>${salaireActuel.toFixed(2)} €</strong>.<br>
+                S'il était resté indexé à l'inflation, il serait de <strong>${inflationActuelle.toFixed(2)} €</strong> soit une différence de <strong>${B} €</strong>.<br>
+                La différence entre votre salaire et le SMIC en janvier 2008 était de <strong>${A} €</strong>.<br>
+                Elle est au <strong>${lastDate}</strong> de <strong>${C} €</strong>.
             `;
-        }
+		}
 
         function updateChart() {
             const points = document.getElementById('points').value;
