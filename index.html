@@ -196,6 +196,9 @@
                 }
             });
 
+            // ✅ Calcul et affichage des différences
+            const row2008 = filteredData.find(row => row.Date === '2008-01');
+            if (!row2008) return;
 
             const resultHTML = `
                 Votre salaire 
