@@ -89,7 +89,7 @@
 <body>
     <header class="header">
         <img src="CA_HERAULT_V_RVB.png" alt="Logo Chambre d'Agriculture de l'Hérault" class="logo">
-        <h1 class="header-title">1Évolution comparée de mon salaire avec l'inflation et le SMIC</h1>
+        <h1 class="header-title">Évolution comparée de mon salaire avec l'inflation et le SMIC</h1>
     </header>
     <div class="container">
         <div class="form-section">
@@ -197,14 +197,28 @@
             });
 
             // ✅ Calcul et affichage des différences
-            const row2008 = filteredData.find(row => row.Date === '2008-01');
+            const row2008 = filteredData.find(row => row.Date === '01/08');
             if (!row2008) return;
 
+            const salaire2008 = parseFloat(row2008["A"]) * points;
+            const smic2008 = parseFloat(row2008["C"]);
+            const A = (salaire2008 - smic2008).toFixed(2);
+
+            const lastRow = filteredData[filteredData.length - 1];
+            const lastDate = lastRow.Date;
+            const salaireActuel = parseFloat(lastRow["A"]) * points;
+            const inflationActuelle = parseFloat(lastRow["B"]) * points;
+            const smicActuel = parseFloat(lastRow["C"]);
+            const B = (salaireActuel - inflationActuelle).toFixed(2);
+            const C = (salaireActuel - smicActuel).toFixed(2);
+
             const resultHTML = `
-                Votre salaire
+                Votre salaire actuel au <strong>${lastDate}</strong> est de <strong>${salaireActuel.toFixed(2)} €</strong>.<br>
+                S'il était resté indexé à l'inflation, il serait de <strong>${inflationActuelle.toFixed(2)} €</strong> soit une différence de <strong>${B} €</strong>.<br>
+                La différence entre votre salaire et le SMIC en janvier 2008 était de <strong>${A} €</strong>.<br>
+                Elle est au <strong>${lastDate}</strong> de <strong>${C} €</strong>.
             `;
-			console.log("Contenu à afficher :", resultHTML);
-            document.getElementById("result-box").innerText = resultHTML;
+            document.getElementById("result-box").innerHTML = resultHTML;
         }
 
         function updateChart() {
