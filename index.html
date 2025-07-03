@@ -204,7 +204,17 @@
             const smic2008 = parseFloat(row2008["C"]);
             const A = (salaire2008 - smic2008).toFixed(2);
 
-            const lastRow = filteredData[filteredData.length - 1];
+			let lastRowIndex = filteredData.length - 1;
+			while (
+				lastRowIndex >= 0 &&
+				(!filteredData[lastRowIndex].Date ||
+				isNaN(parseFloat(filteredData[lastRowIndex]["A"])) ||
+				isNaN(parseFloat(filteredData[lastRowIndex]["B"])) ||
+				isNaN(parseFloat(filteredData[lastRowIndex]["C"])))
+			) {
+				lastRowIndex--;
+			}
+			const lastRow = filteredData[lastRowIndex];
             const lastDate = lastRow.Date;
             const salaireActuel = parseFloat(lastRow["A"]) * points;
             const inflationActuelle = parseFloat(lastRow["B"]) * points;
@@ -218,6 +228,7 @@
                 La différence entre votre salaire et le SMIC en janvier 2008 était de <strong>${A} €</strong>.<br>
                 Elle est au <strong>${lastDate}</strong> de <strong>${C} €</strong>.
             `;
+			console.log("Contenu à afficher :", resultHTML);
             document.getElementById("result-box").innerHTML = resultHTML;
         }
 
