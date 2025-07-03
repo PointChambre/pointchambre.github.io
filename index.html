@@ -99,6 +99,7 @@
         </div>
         <div>
             <canvas id="myChart"></canvas>
+			<div id="result-box" style="background-color: #e0f7fa; border: 1px solid #26a69a; padding: 15px; margin-top: 20px; border-radius: 5px;"></div>
         </div>
         <div class="help">
             ❓
@@ -194,6 +195,24 @@
                     }
                 }
             });
+            const salaire2008 = parseFloat(rawData.find(row => row.Date === '2008-01')["A"]) * points;
+            const smic2008 = parseFloat(rawData.find(row => row.Date === '2008-01')["C"]);
+            const A = (salaire2008 - smic2008).toFixed(2);
+
+            const lastRow = rawData[rawData.length - 1];
+            const lastDate = lastRow.Date;
+            const salaireActuel = parseFloat(lastRow["A"]) * points;
+            const inflationActuelle = parseFloat(lastRow["B"]) * points;
+            const smicActuel = parseFloat(lastRow["C"]);
+            const B = (salaireActuel - inflationActuelle).toFixed(2);
+            const C = (salaireActuel - smicActuel).toFixed(2);
+
+            document.getElementById("result-box").innerHTML = `
+                Votre salaire actuel au ${lastDate} est de ${salaireActuel.toFixed(2)} €. 
+                S'il était resté indexé à l'inflation il serait de ${(inflationActuelle).toFixed(2)} €. 
+                La différence entre votre salaire et le SMIC en janvier 2008 était de ${A} €. 
+                Elle est au ${lastDate} de ${C} €.
+            `;
         }
 
         function updateChart() {
