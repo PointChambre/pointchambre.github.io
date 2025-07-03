@@ -12,22 +12,22 @@
             margin: 0;
             padding: 0;
         }
-		.header {
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			padding: 10px 15px;
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 15px;
             background-color: #f4f4f4;
             border-bottom: 1px solid #ddd;
-		}
-		.header-title {
-			flex-grow: 1;
-			text-align: center;
-			font-size: 1.5rem;
-			font-weight: bold;
-			margin: 0;
-			color: #333;
-		}
+        }
+        .header-title {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0;
+            color: #333;
+        }
         header img {
             height: 50px;
             margin-right: 10px;
@@ -81,9 +81,9 @@
                 height: 40px;
             }
         }
-		a { 
-			color: #fff; 
-		}
+        a { 
+            color: #fff; 
+        }
     </style>
 </head>
 <body>
@@ -98,21 +98,24 @@
             <button onclick="updateChart()">Mettre à jour</button>
         </div>
         <div>
-			<canvas id="myChart"></canvas>
+            <canvas id="myChart"></canvas>
         </div>
-		<div id="result-box" style="background-color: #e0f7fa; border: 1px solid #26a69a; padding: 15px; margin-top: 20px; border-radius: 5px;"></div>
+
+        <!-- ✅ Résultat affiché ici -->
+        <div id="result-box" style="background-color: #e0f7fa; border: 1px solid #26a69a; padding: 15px; margin-top: 20px; border-radius: 5px;"></div>
+
         <div class="help">
             ❓
             <span class="tooltip">
-			Cette page permet de comparer l'évolution de son salaire par rapport à l'inflation et au SMIC depuis 2008.<br>
+            Cette page permet de comparer l'évolution de son salaire par rapport à l'inflation et au SMIC depuis 2008.<br>
             Depuis 2010 environ le point d'indice n'est plus revalorisé pour suivre l'inflation.<br>
-			Sources :<br>
-			Source inflation - 2021 : <a href="https://france-inflation.com/historique_tableaux_ipc.php">https://france-inflation.com/historique_tableaux_ipc.php</a><br>
-			Source inflation 2022 : <a href="https://www.weblex.fr/fiches-conseils/indice-des-prix-a-la-consommation-2022">https://www.weblex.fr/fiches-conseils/indice-des-prix-a-la-consommation-2022</a><br>
-			Source inflation 2023 : <a href="https://www.weblex.fr/chiffres-cles/indice-des-prix-a-la-consommation-annee-2023">https://www.weblex.fr/chiffres-cles/indice-des-prix-a-la-consommation-annee-2023</a><br>
-			Source inflation 2024 : <a href="https://www.weblex.fr/chiffres-cles/indice-des-prix-a-la-consommation-annee-2024">https://www.weblex.fr/chiffres-cles/indice-des-prix-a-la-consommation-annee-2024</a><br>
-			Source SMIC : <a href="https://www.insee.fr/fr/statistiques/1375188">https://www.insee.fr/fr/statistiques/1375188</a><br>
-			</span>
+            Sources :<br>
+            Source inflation - 2021 : <a href="https://france-inflation.com/historique_tableaux_ipc.php">https://france-inflation.com/historique_tableaux_ipc.php</a><br>
+            Source inflation 2022 : <a href="https://www.weblex.fr/fiches-conseils/indice-des-prix-a-la-consommation-2022">https://www.weblex.fr/fiches-conseils/indice-des-prix-a-la-consommation-2022</a><br>
+            Source inflation 2023 : <a href="https://www.weblex.fr/chiffres-cles/indice-des-prix-a-la-consommation-annee-2023">https://www.weblex.fr/chiffres-cles/indice-des-prix-a-la-consommation-annee-2023</a><br>
+            Source inflation 2024 : <a href="https://www.weblex.fr/chiffres-cles/indice-des-prix-a-la-consommation-annee-2024">https://www.weblex.fr/chiffres-cles/indice-des-prix-a-la-consommation-annee-2024</a><br>
+            Source SMIC : <a href="https://www.insee.fr/fr/statistiques/1375188">https://www.insee.fr/fr/statistiques/1375188</a><br>
+            </span>
         </div>
     </div>
 
@@ -131,23 +134,20 @@
                 }
             });
         }
-		console.log(rawData);
+
         function createChart(points) {
             if (chart) {
                 chart.destroy();
             }
 
-            // Préparer les données pour le graphique
-            const dates = rawData.map(row => row.Date);
-            const valeur_point = rawData.map(row => parseFloat(row["A"]) * points);
-            const valeur_inflation = rawData.map(row => parseFloat(row["B"]) * points);
-            const smic = rawData.map(row => parseFloat(row["C"]));
-			
-            const minValue = Math.floor(Math.min(
-                ...valeur_point,
-                ...valeur_inflation,
-                ...smic
-            ) / 100) * 100;
+            const filteredData = rawData.filter(row => row.Date && row["A"] && row["B"] && row["C"]);
+
+            const dates = filteredData.map(row => row.Date);
+            const valeur_point = filteredData.map(row => parseFloat(row["A"]) * points);
+            const valeur_inflation = filteredData.map(row => parseFloat(row["B"]) * points);
+            const smic = filteredData.map(row => parseFloat(row["C"]));
+
+            const minValue = Math.floor(Math.min(...valeur_point, ...valeur_inflation, ...smic) / 100) * 100;
 
             chart = new Chart(ctx, {
                 type: 'line',
@@ -159,7 +159,7 @@
                             data: valeur_point,
                             borderColor: 'blue',
                             borderWidth: 2,
-							pointStyle: false,
+                            pointStyle: false,
                             fill: false
                         },
                         {
@@ -167,7 +167,7 @@
                             data: valeur_inflation,
                             borderColor: 'green',
                             borderWidth: 2,
-							pointStyle: false,
+                            pointStyle: false,
                             fill: false
                         },
                         {
@@ -175,7 +175,7 @@
                             data: smic,
                             borderColor: 'red',
                             borderWidth: 2,
-							pointStyle: false,
+                            pointStyle: false,
                             fill: false
                         }
                     ]
@@ -195,10 +195,8 @@
                     }
                 }
             });
-            // Nettoyage des données vides ou incomplètes
-            const filteredData = rawData.filter(row => row.Date && row["A"] && row["B"] && row["C"]);
 
-            // Récupérer la ligne de janvier 2008
+            // ✅ Calcul et affichage des différences
             const row2008 = filteredData.find(row => row.Date === '2008-01');
             if (!row2008) return;
 
@@ -206,7 +204,6 @@
             const smic2008 = parseFloat(row2008["C"]);
             const A = (salaire2008 - smic2008).toFixed(2);
 
-            // Récupérer la ligne la plus récente (dernière ligne utile)
             const lastRow = filteredData[filteredData.length - 1];
             const lastDate = lastRow.Date;
             const salaireActuel = parseFloat(lastRow["A"]) * points;
@@ -215,18 +212,20 @@
             const B = (salaireActuel - inflationActuelle).toFixed(2);
             const C = (salaireActuel - smicActuel).toFixed(2);
 
-            // Affichage
-            document.getElementById("result-box").innerHTML = `
-                Votre salaire.
+            const resultHTML = `
+                Votre salaire actuel au <strong>${lastDate}</strong> est de <strong>${salaireActuel.toFixed(2)} €</strong>.<br>
+                S'il était resté indexé à l'inflation, il serait de <strong>${inflationActuelle.toFixed(2)} €</strong> soit une différence de <strong>${B} €</strong>.<br>
+                La différence entre votre salaire et le SMIC en janvier 2008 était de <strong>${A} €</strong>.<br>
+                Elle est au <strong>${lastDate}</strong> de <strong>${C} €</strong>.
             `;
-		}
+            document.getElementById("result-box").innerHTML = resultHTML;
+        }
 
         function updateChart() {
             const points = document.getElementById('points').value;
             createChart(points);
         }
 
-        // Charger les données initiales
         fetchCSVData(() => updateChart());
     </script>
 </body>
