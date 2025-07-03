@@ -199,9 +199,12 @@
             // ✅ Calcul et affichage des différences
             const row2008 = filteredData.find(row => row.Date === '2008-01');
             if (!row2008) return;
+            const salaire2008 = parseFloat(row2008["A"]) * points;
+            const smic2008 = parseFloat(row2008["C"]);
+            const A = (salaire2008 - smic2008).toFixed(2);
 
             const resultHTML = `
-                Votre salaire 
+                Votre salaire ${salaire2008.toFixed(2)}
             `;
 			console.log("Contenu à afficher :", resultHTML);
             document.getElementById("result-box").innerText = resultHTML;
